@@ -1,43 +1,57 @@
 package io.zipcoder.crudapp;
 
+import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
+@RequestMapping("/API")
 @RestController
 public class PersonController {
 
-    private final PersonRepository repository;
+    private final PersonService service;
 
-    PersonController(PersonRepository personRepository) {
-        this.repository=personRepository;
+    @Autowired
+    PersonController(PersonService service) {
+        this.service=service;
     }
-    //get - ALL
-    //get - ONE
-    //post - CREATE
-    //put - UPDATE
-    //delete - DELETE
 
-    @PutMapping("/people")
-    io.zipcoder.crudapp.Person createPerson(@RequestBody io.zipcoder.crudapp.Person p) {
-        Person person =
+    @PostMapping("/people")
+    ResponseEntity<Person> createPerson(@RequestBody io.zipcoder.crudapp.Person p) {
+        Person person = service.createPerson(p);
+        return ResponseEntity.ok(person);
     }
 
     @GetMapping("/people/{id}")
-    io.zipcoder.crudapp.Person getPerson(@PathVariable int id) {}
+    ResponseEntity<Person> getPerson(@PathVariable long id) {
+        Person person = service.getPerson(id);
+        return ResponseEntity.ok(person);
+    }
 
     @GetMapping("/people")
-    List<io.zipcoder.crudapp.Person> getPersonList() {}
+    ResponseEntity<List<Person>> getPersonList() {
+        List<Person> people = service.getPersonList();
+        return ResponseEntity.ok(people);
+    }
 
-    @PostMapping("/people/{id}")
-    io.zipcoder.crudapp.Person updatePerson(@RequestBody io.zipcoder.crudapp.Person p){}
+    //////////
+    @PutMapping("/people/{id}")
+    ResponseEntity<Person> updatePerson(@RequestBody io.zipcoder.crudapp.Person p, @PathVariable long id){
+        Person person = service.updatePerson(p, id);
+        return ResponseEntity.ok(person);
+    }
 
+
+    /////////////
     @DeleteMapping("/people/{id}")
-    void deletePerson(@PathVariable int id){}
+    ResponseEntity<String> deletePerson(@PathVariable long id){
+        service.deletePerson(id);
+        return ResponseEntity.ok("Person "+ id + " deleted");
+
+    }
 
 
 
