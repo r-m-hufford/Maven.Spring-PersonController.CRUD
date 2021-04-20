@@ -37,24 +37,16 @@ public class PersonController {
         return ResponseEntity.ok(people);
     }
 
-    //////////
     @PutMapping("/people/{id}")
     ResponseEntity<Person> updatePerson(@RequestBody io.zipcoder.crudapp.Person p, @PathVariable long id){
         Person person = service.updatePerson(p, id);
         return ResponseEntity.ok(person);
     }
 
-
-    /////////////
     @DeleteMapping("/people/{id}")
     ResponseEntity<String> deletePerson(@PathVariable long id){
         service.deletePerson(id);
         return ResponseEntity.ok("Person "+ id + " deleted");
 
     }
-
-
-
-
-
 }
